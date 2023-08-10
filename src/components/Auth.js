@@ -5,10 +5,12 @@ import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-export const Auth = ({ setIsAuth }) => {
+export const Auth = ({ setIsAuth }) => { 
   const signInWithGoogle = async () => {
     try {
+      //store account info
       const result = await signInWithPopup(auth, provider);
+      //keep user logged in
       cookies.set("auth-token", result.user.refreshToken);
       setIsAuth(true);
     } catch (err) {

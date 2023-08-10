@@ -14,30 +14,34 @@ import "../styles/Chat.css";
 
 export const Chat = ({ room }) => {
   const [messages, setMessages] = useState([]);
+  //represents what the user is typing
   const [newMessage, setNewMessage] = useState("");
   const messagesRef = collection(db, "messages");
-
+  //query from the same room
   useEffect(() => {
     const queryMessages = query(
       messagesRef,
       where("room", "==", room),
       orderBy("createdAt")
     );
+    //run whenever query changes
     const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
       let messages = [];
+      //loop through every element in snapshot and push to messages array
       snapshot.forEach((doc) => {
         messages.push({ ...doc.data(), id: doc.id });
       });
       console.log(messages);
       setMessages(messages);
     });
-
+    //clean up useEffect
     return () => unsuscribe();
   }, []);
 
   const handleSubmit = async (event) => {
+    //prevent page reload
     event.preventDefault();
-
+    //check if message is not empty
     if (newMessage === "") return;
     await addDoc(messagesRef, {
       text: newMessage,
@@ -45,7 +49,7 @@ export const Chat = ({ room }) => {
       user: auth.currentUser.displayName,
       room,
     });
-
+    //empty input box after send
     setNewMessage("");
   };
 
@@ -76,3 +80,4 @@ export const Chat = ({ room }) => {
     </div>
   );
 };
+ 

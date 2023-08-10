@@ -8,10 +8,11 @@ import "./App.css";
 const cookies = new Cookies();
 
 function ChatApp() {
+  //check if user is auth or not
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token"));
   const [isInChat, setIsInChat] = useState(null);
   const [room, setRoom] = useState("");
-
+  //if user is not auth then render auth component
   if (!isAuth) {
     return (
       <AppWrapper
@@ -23,7 +24,7 @@ function ChatApp() {
       </AppWrapper>
     );
   }
-
+//if user is auth 
   return (
     <AppWrapper isAuth={isAuth} setIsAuth={setIsAuth} setIsInChat={setIsInChat}>
       {!isInChat ? (
